@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
+
 import { SharedLayout } from "./components/SharedLayout/SharedLayot";
 
 const TweetsPage = lazy(() => import("./pages/TweetsPage/TweetsPage"));
@@ -14,7 +15,7 @@ function App() {
           <Route path="/tweets" element={<TweetsPage />} />
           <Route path="*" element={<Navigate to={"/"} />} />
         </Route>
-        <Route path="*" element={<HomePage />} />
+        <Route path="*" element={<Navigate to={"/"} />} />
       </Routes>
     </div>
   );

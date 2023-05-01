@@ -5,9 +5,15 @@ export const ButtonScrollUp = ({
   onClick,
   children,
   isButtonUp,
+  disabled=false
 }) => {
   return (
-    <ButtonUp type={type} onClick={onClick} isButtonUp={isButtonUp}>
+    <ButtonUp
+      type={type}
+      onClick={onClick}
+      isButtonUp={isButtonUp}
+      disabled={disabled}
+    >
       {children}
     </ButtonUp>
   );

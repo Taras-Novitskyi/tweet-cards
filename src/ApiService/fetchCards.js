@@ -4,7 +4,7 @@ axios.defaults.baseURL = "https://63b0466df9a53fa202653bbb.mockapi.io/api/v1/";
 
 export async function fetchCards({page = 1, limit = 6}) {
   try {
-    const { data } = await axios.get("/users", {
+    const {data} = await axios.get("/users", {
       params: {
         limit,
         page,
@@ -12,6 +12,6 @@ export async function fetchCards({page = 1, limit = 6}) {
     });
     return data;
   } catch (error) {
-    return error.massege;
+    return error;
   }
 }

@@ -15,7 +15,7 @@ import { usersReducer } from "./usersSlice";
 const persistConfig = {
   key: "users",
   storage,
-  whitelist: ["items", "usersFollowers", "total"],
+  whitelist: ["items", "usersFollowers"],
 };
 
 export const persistedReducer = persistReducer(persistConfig, usersReducer);

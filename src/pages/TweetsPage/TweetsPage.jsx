@@ -1,60 +1,61 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-hot-toast";
 
 import { fetchUsers } from "../../redux/operation";
-import { toggleFollowing, updateTotal } from "../../redux/usersSlice";
+import { fetchCards } from "../../ApiService/fetchCards";
+import { makeSmoothScroll } from "../../helpers/smoothScroll";
+import { toggleFollowing, updateError } from "../../redux/usersSlice";
 import {
   selectUsers,
-  // selectIsLoading,
-  // selectError,
+  selectIsLoading,
+  selectError,
   selectUsersFollowers,
-  selectCountUsers,
 } from "../../redux/selectors";
+
 import { CardsList } from "../../components/CardsList/CardsList";
 import { Header } from "../../components/Header/Header";
 import { Container } from "../../components/Container/Container";
 import { ButtonMain } from "../../components/Button/Button";
+import { Loader } from "../../components/Loader/Loader";
 import { NoDataContainer } from "./TweetsPage.styled";
-import { fetchCards } from "../../ApiService/fetchCards";
-import { makeSmoothScroll } from "../../helpers/smoothScroll";
 
 const TweetsPage = () => {
   const [usersCards, setUsersCards] = useState([]);
   const [page, setPage] = useState(1);
   const [isShownLoadMore, setIsShownLoadMore] = useState(false);
   const [filter, setFilter] = useState(null);
+  const [noMoreCards, setNoMoreCards] = useState(false);
+  const [isLoadMoreLoading, setIsLoadMoreLoading] = useState(false);
 
   const usersFollowers = useSelector(selectUsersFollowers);
   const cards = useSelector(selectUsers);
-  const totalUsers = useSelector(selectCountUsers);
-  // const isLoading = useSelector(selectIsLoading);
-  // const error = useSelector(selectError);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
 
   const dispatch = useDispatch();
 
   const limit = 6;
-  //TODO перенести limit in env
 
   useEffect(() => {
     async function fetchAPI() {
       try {
-        setIsShownLoadMore(false);
+        setIsLoadMoreLoading(true);
         const data = await fetchCards({ limit, page });
 
+        if (!data) {
+          dispatch(updateError(data));
+          return;
+        }
+
         if (data.length === 0) {
-          toast.error("Sorry, no more cards..");
-          dispatch(updateTotal(usersCards.length));
+          setNoMoreCards(true);
           return;
         }
 
         if (page !== 1) {
           setUsersCards((state) => [...state, ...data]);
 
-          if (
-            data.length === limit &&
-            !(totalUsers && usersCards.length + data.length === totalUsers)
-          ) {
+          if (data.length === limit) {
             setIsShownLoadMore(true);
           }
 
@@ -66,13 +67,16 @@ const TweetsPage = () => {
         setUsersCards(data);
         setIsShownLoadMore(true);
       } catch (error) {
-        console.log(error);
+        dispatch(updateError(error));
+      } finally {
+        setIsLoadMoreLoading(false);
       }
     }
     fetchAPI();
-  }, [dispatch, page, totalUsers, usersCards.length]);
+  }, [dispatch, page]);
 
   useEffect(() => {
+    setNoMoreCards(false);
     if (filter) {
       switch (filter) {
         case "follow":
@@ -122,15 +126,41 @@ const TweetsPage = () => {
     <>
       <Header changeFilter={changeFilter}></Header>
       <Container>
-        {usersCards && usersCards.length > 0 ? (
-          <CardsList usersCards={usersCards} onClick={handleButtonClick} />
+        {isLoading ? (
+          <Loader />
         ) : (
-          <NoDataContainer>No more users card..</NoDataContainer>
-        )}
-        {isShownLoadMore && !filter && (
-          <ButtonMain marginBottom={46} onClick={onLoadMore}>
-            load more
-          </ButtonMain>
+          <>
+            {error ? (
+              <NoDataContainer>
+                We are sorry, but something is wrong, please try again.
+              </NoDataContainer>
+            ) : (
+              <>
+                {(!usersCards || usersCards.length === 0) &&
+                  !isLoadMoreLoading && (
+                    <NoDataContainer>{`Sorry, your ${filter} list is empty.`}</NoDataContainer>
+                  )}
+                <CardsList
+                  usersCards={usersCards}
+                  onClick={handleButtonClick}
+                />
+                {noMoreCards && (
+                  <NoDataContainer>
+                    Sorry, no more cards were found
+                  </NoDataContainer>
+                )}
+                {isShownLoadMore && !filter && !noMoreCards && (
+                  <ButtonMain
+                    marginBottom={0}
+                    onClick={onLoadMore}
+                    disabled={isLoadMoreLoading}
+                  >
+                    load more
+                  </ButtonMain>
+                )}
+              </>
+            )}
+          </>
         )}
       </Container>
     </>

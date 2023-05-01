@@ -13,11 +13,12 @@ export const NoDataContainer = styled.div`
   justify-content: center;
   align-items: center;
 
+  height: 50px;
+
   font-family: "Montserrat";
   font-weight: 500;
   font-size: 18px;
   line-height: 22px;
-  text-transform: uppercase;
 
   color: #373737;
 `;

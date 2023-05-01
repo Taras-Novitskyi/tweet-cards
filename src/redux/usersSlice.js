@@ -3,7 +3,6 @@ import { fetchUsers } from "./operation";
 
 const usersInitialState = {
   items: [],
-  total: null,
   isLoading: false,
   error: null,
   usersFollowers: [],
@@ -22,8 +21,8 @@ const usersSlice = createSlice({
         state.usersFollowers.splice(index, 1);
       }
     },
-    updateTotal: (state, action) => {
-      state.total = action.payload;
+    updateError: (state, action) => {
+      state.error = action.payload;
     },
   },
   extraReducers: (builder) =>
@@ -32,7 +31,6 @@ const usersSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         state.items = action.payload;
-        state.total = action.payload.length;
       })
       .addCase(fetchUsers.pending, (state) => {
         state.isLoading = true;
@@ -43,5 +41,5 @@ const usersSlice = createSlice({
       })
 });
 
-export const { toggleFollowing, updateTotal } = usersSlice.actions;
+export const { toggleFollowing, updateError } = usersSlice.actions;
 export const usersReducer = usersSlice.reducer;
