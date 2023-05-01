@@ -6,8 +6,8 @@ import { fetchUsers } from "../../redux/operation";
 import { toggleFollowing, updateTotal } from "../../redux/usersSlice";
 import {
   selectUsers,
-  selectIsLoading,
-  selectError,
+  // selectIsLoading,
+  // selectError,
   selectUsersFollowers,
   selectCountUsers,
 } from "../../redux/selectors";
@@ -28,8 +28,8 @@ const TweetsPage = () => {
   const usersFollowers = useSelector(selectUsersFollowers);
   const cards = useSelector(selectUsers);
   const totalUsers = useSelector(selectCountUsers);
-  const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
+  // const isLoading = useSelector(selectIsLoading);
+  // const error = useSelector(selectError);
 
   const dispatch = useDispatch();
 
@@ -70,7 +70,7 @@ const TweetsPage = () => {
       }
     }
     fetchAPI();
-  }, [dispatch, page]);
+  }, [dispatch, page, totalUsers, usersCards.length]);
 
   useEffect(() => {
     if (filter) {

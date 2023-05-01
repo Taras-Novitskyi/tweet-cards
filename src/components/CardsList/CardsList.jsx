@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectUsersFollowers } from "../../redux/selectors";
 
 import { CardItem } from "../CardItem/CardItem";
@@ -6,7 +6,6 @@ import { List, Item } from "./CardsList.styled";
 
 export const CardsList = ({ usersCards, onClick }) => {
   const usersFollowers = useSelector(selectUsersFollowers);
-  const dispatch = useDispatch();
 
   const isFollowing = (id) => usersFollowers.includes(id);
 

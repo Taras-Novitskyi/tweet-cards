@@ -1,6 +1,6 @@
 // import PropTypes from 'prop-types';
 import { useDispatch } from "react-redux";
-import { logo, bgPicture, boy } from "../../images";
+import { logo, bgPicture } from "../../images";
 import { ButtonMain } from "../Button/Button";
 import { toggleFollowing } from "../../redux/usersSlice";
 import {

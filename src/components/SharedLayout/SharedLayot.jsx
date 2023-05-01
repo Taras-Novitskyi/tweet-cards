@@ -1,7 +1,6 @@
 import { Suspense, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { useSelector } from "react-redux";
 
 import { ButtonScrollUp } from "../Button/Button";
 
