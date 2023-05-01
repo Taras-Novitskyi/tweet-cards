@@ -2,45 +2,49 @@ import { useEffect, useState, useRef } from "react";
 import { Container, Button, FilterList, FilterItem } from "./HeaderMenu.styled";
 
 export const HeaderMenu = ({ changeFilter }) => {
-  const [isHidden, setIsHidden] = useState(true);
+  const [isShowMenu, setIsShowMenu] = useState(false);
 
   const headerMenuRef = useRef(null);
 
   useEffect(() => {
-    const handleClick = (e) => {
-      if (headerMenuRef.current === headerMenuRef.target) {
-        setIsHidden(true);
-      }
-    };
-
     const handleKeyDown = (e) => {
       if (e.code === "Escape") {
-        setIsHidden(true);
+        setIsShowMenu(false);
       }
     };
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("mousedown", handleClick, true);
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("mousedown", handleClick, true);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (headerMenuRef.current !== e.target) {
+        setIsShowMenu(false);
+      }
+    };
+    document.addEventListener("click", handleClick, true);
+
+    return () => {
+      document.removeEventListener("click", handleClick, true);
     };
   }, []);
 
   const handleClickFilter = () => {
-    setIsHidden((prev) => !prev);
+    setIsShowMenu((prev) => !prev);
   };
 
   const filterBy = (option) => {
     changeFilter(option);
-    setIsHidden(true);
+    setIsShowMenu(false);
   };
 
   return (
     <Container>
       <Button onClick={handleClickFilter}>filter</Button>
-      <FilterList isHidden={isHidden}>
+      <FilterList isHidden={!isShowMenu} ref={headerMenuRef}>
         <FilterItem>
           <Button onClick={() => filterBy("showAll")}>show all</Button>
         </FilterItem>

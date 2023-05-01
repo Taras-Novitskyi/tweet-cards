@@ -7,7 +7,7 @@ export const Container = styled.div`
   justify-content: center;
 
   height: 40px;
-  width: 220px;
+  width: 160px;
 
   color: #ebd8ff;
   background: linear-gradient(
@@ -17,6 +17,10 @@ export const Container = styled.div`
     #4b2a99 78.99%
   );
   border-radius: 10.3108px;
+
+  @media (min-width: 460px) {
+    width: 220px;
+  }
 `;
 
 export const Button = styled.button`
