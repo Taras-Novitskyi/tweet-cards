@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import {
   persistStore,
   persistReducer,
@@ -15,12 +15,8 @@ import { usersReducer } from "./usersSlice";
 const persistConfig = {
   key: "users",
   storage,
-  // whitelist: ["items"],
+  whitelist: ["items", "usersFollowers", "total"],
 };
-
-const rootReducer = combineReducers({
-  users: usersReducer,
-});
 
 export const persistedReducer = persistReducer(persistConfig, usersReducer);
 

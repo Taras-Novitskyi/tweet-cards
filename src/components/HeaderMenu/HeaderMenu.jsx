@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Container, Button, FilterList, FilterItem } from "./HeaderMenu.styled";
 
 export const HeaderMenu = ({ changeFilter }) => {
-	const [isHidden, setIsHidden] = useState(true);
-	// const [chosenFilter, setChosenFilter] = useState('');
-	//TODO виділити іншим кольором активний фільтр в меню
+  const [isHidden, setIsHidden] = useState(true);
+  // const [chosenFilter, setChosenFilter] = useState('');
+  //TODO виділити іншим кольором активний фільтр в меню
 
   const handleClickFilter = () => {
     setIsHidden((prev) => !prev);

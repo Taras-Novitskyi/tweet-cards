@@ -2,6 +2,7 @@
 import { useDispatch } from "react-redux";
 import { logo, bgPicture, boy } from "../../images";
 import { ButtonMain } from "../Button/Button";
+import { toggleFollowing } from "../../redux/usersSlice";
 import {
   CardContainer,
   ContainerLogo,
@@ -16,11 +17,18 @@ import {
 
 export const CardItem = ({
   id,
-  dataCard: { user, avatar, followers, tweets, isFollowing },
-  onClick,
+  dataCard: { user, avatar, followers, tweets },
+  isFollowing,
 }) => {
-  const addCommas = (num) => {
-    return num.toLocaleString("en-US");
+  const dispatch = useDispatch();
+
+  const addCommas = (num) =>
+    isFollowing
+      ? (num + 1).toLocaleString("en-US")
+      : num.toLocaleString("en-US");
+
+  const handleClickFollow = (id) => {
+    dispatch(toggleFollowing(id));
   };
 
   return (
@@ -38,18 +46,15 @@ export const CardItem = ({
           <UserPhoto src={avatar} alt={user} />
         </ContainerPhoto>
 
-        <Tweets>{addCommas(tweets)} tweets</Tweets>
+        <Tweets>{tweets.toLocaleString("en-US")} tweets</Tweets>
         <Followers>{addCommas(followers)} followers</Followers>
-        <ButtonMain onClick={() => onClick(id)} isFollowing={isFollowing}>
+        <ButtonMain
+          onClick={() => handleClickFollow(id)}
+          isFollowing={isFollowing}
+        >
           follow
         </ButtonMain>
       </ContainerData>
     </CardContainer>
   );
 };
-
-// CardItem.propTypes = {
-//   name: PropTypes.string.isRequired,
-//   number: PropTypes.string.isRequired,
-//   id: PropTypes.string.isRequired,
-// };

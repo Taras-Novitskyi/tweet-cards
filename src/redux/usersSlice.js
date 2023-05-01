@@ -3,8 +3,11 @@ import { fetchUsers } from "./operation";
 
 const usersInitialState = {
   items: [],
+  total: null,
   isLoading: false,
   error: null,
+  usersFollowers: [],
+  page: 1,
 };
 
 const usersSlice = createSlice({
@@ -12,18 +15,15 @@ const usersSlice = createSlice({
   initialState: usersInitialState,
   reducers: {
     toggleFollowing: (state, action) => {
-      const index = state.items.findIndex((item) => item.id === action.payload);
-
-      state.items[index] = {
-        ...state.items[index],
-        followers: state.items[index].isFollowing
-          ? state.items[index].followers - 1
-          : state.items[index].followers + 1,
-        isFollowing: !state.items[index].isFollowing,
-      };
+      const index = state.usersFollowers.indexOf(action.payload);
+      if (index === -1) {
+        state.usersFollowers.push(action.payload);
+      } else {
+        state.usersFollowers.splice(index, 1);
+      }
     },
-    updateUsers: (state, action) => {
-      state.items = action.payload;
+    updateTotal: (state, action) => {
+      state.total = action.payload;
     },
   },
   extraReducers: (builder) =>
@@ -32,6 +32,7 @@ const usersSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         state.items = action.payload;
+        state.total = action.payload.length;
       })
       .addCase(fetchUsers.pending, (state) => {
         state.isLoading = true;
@@ -39,19 +40,8 @@ const usersSlice = createSlice({
       .addCase(fetchUsers.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      }),
-  // .addCase(followingUser.pending, (state) => {
-  //   state.isRefreshing = true;
-  // })
-  // .addCase(followingUser.fulfilled, (state, action) => {
-  //   state.user = action.payload;
-  //   state.isLoggedIn = true;
-  //   state.isRefreshing = false;
-  // })
-  // .addCase(followingUser.rejected, (state) => {
-  //   state.isRefreshing = false;
-  // }),
+      })
 });
 
-export const { toggleFollowing, updateUsers } = usersSlice.actions;
+export const { toggleFollowing, updateTotal } = usersSlice.actions;
 export const usersReducer = usersSlice.reducer;
