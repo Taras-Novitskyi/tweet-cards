@@ -1,6 +1,5 @@
 import { Suspense, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
 
 import { ButtonScrollUp } from "../Button/Button";
 
@@ -26,7 +25,6 @@ export const SharedLayout = () => {
 
   return (
     <>
-      <div><Toaster position="top-right" reverseOrder={false} /></div>
       <Suspense>
         <Outlet />
       </Suspense>
